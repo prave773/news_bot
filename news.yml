@@ -1,0 +1,32 @@
+name: WhatsApp News Bot
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run WhatsApp news bot
+      run: python whatsapp_news_bot.py
+      env:
+        TWILIO_SID: ${{ secrets.TWILIO_SID }}
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        FROM_WHATSAPP_NUMBER: ${{ secrets.FROM_WHATSAPP_NUMBER }}
+        TO_WHATSAPP_NUMBER: ${{ secrets.TO_WHATSAPP_NUMBER }}
+        NEWSDATA_API_KEY: ${{ secrets.NEWSDATA_API_KEY }}
